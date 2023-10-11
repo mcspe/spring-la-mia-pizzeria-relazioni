@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: head(${pageTitle})"></head>
+<body>
+	
+	<header th:include="fragments/header :: header"></header>
+	
+	<main class="container my-5">
+		
+		<div class="text-end my-3">
+			<a href="/create" class="btn"><i class="fa-solid fa-square-plus fa-2xl"></i> Add a new pizza</a>				
+		</div>
+		
+		<ul th:if="${pizzas.size()} != 0" class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+			<li th:each="pizza : ${pizzas}"
+				th:object="${pizza}"
+				class="col">
+				<th:block th:replace="fragments/card :: card(${pizza})"></th:block>
+			</li>
+		</ul>
+		
+		<h3 th:if="${pizzas.size()} == 0" class="text-center">No pizzas available at this time</h3>
+		
+	</main>
+	
+</body>
+</html>

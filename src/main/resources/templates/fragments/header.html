@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="header">
+
+	<nav class="navbar navbar-expand-md bg-dark border-bottom border-body" data-bs-theme="dark">
+		<div class="container py-1">
+			<a class="navbar-brand m-0" href="/">
+				<img class="object-fit-contain" alt="Logo" th:src="@{/img/logo.jpg}">
+			</a>
+			<form action="/">
+				<input type="text" name="pizza" placeholder="Cerca...">
+				<button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+			</form>
+		</div>
+	</nav>
+
+</th:block>
+
+</html>

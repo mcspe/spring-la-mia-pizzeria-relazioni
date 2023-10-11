@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/head :: head(${pageTitle})"></head>
+
+<body>
+
+	<header th:include="fragments/header :: header"></header>
+	
+	<main class="container my-5">
+		
+		<h1 class="text-center my-5">Add a new Pizza</h1>
+			
+		<th:block th:include="fragments/pizza-form :: form(${pizzaDTO})"></th:block>
+
+	</main>
+
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="form(${pizzaDTO})">
+	<form th:object="${pizzaDTO}" method="post">
+		
+		<div class="input-group mb-3">
+			<span class="ms-form input-group-text bg-dark text-bg-dark" id="name">Insert pizza name</span>
+			<input type="text" class="form-control" name="name" th:field="*{name}" th:errorClass="is-invalid">
+		</div>
+		<div th:if="${#fields.hasErrors('name')}" class="text-danger fs-6 fw-lighter fst-italic">
+			<ul>
+				<li th:each="err : ${#fields.errors('name')}" th:text="${err}"></li>
+			</ul>
+		</div>
+		
+		<div class="input-group mb-3">
+			<span class="ms-form input-group-text bg-dark text-bg-dark">Insert pizza description</span>
+			<textarea class="form-control" name="description" th:field="*{description}" th:errorClass="is-invalid"></textarea>
+		</div>
+		<div th:if="${#fields.hasErrors('description')}" class="text-danger fs-6 fw-lighter fst-italic">
+			<ul>
+				<li th:each="err : ${#fields.errors('description')}" th:text="${err}"></li>
+			</ul>
+		</div>
+		
+		<div class="input-group mb-3">
+			<span class="ms-form input-group-text bg-dark text-bg-dark">Insert pizza image URL</span>
+			<textarea class="form-control" name="img" th:field="*{img}" th:errorClass="is-invalid"></textarea>
+		</div>
+		<div th:if="${#fields.hasErrors('img')}" class="text-danger fs-6 fw-lighter fst-italic">
+			<ul>
+				<li th:each="err : ${#fields.errors('img')}" th:text="${err}"></li>
+			</ul>
+		</div>
+		
+		<div class="input-group mb-3">
+			<span class="ms-form input-group-text bg-dark text-bg-dark">Insert pizza price</span>
+			<input type="number" step="0.5" class="form-control" name="price" th:field="*{price}" th:errorClass="is-invalid">
+			<span class="input-group-text">&euro;</span>
+		</div>
+		<div th:if="${#fields.hasErrors('price')}" class="text-danger fs-6 fw-lighter fst-italic">
+			<ul>
+				<li th:each="err : ${#fields.errors('price')}" th:text="${err}"></li>
+			</ul>
+		</div>
+		
+		<div class="input-group justify-content-end">
+			<button type="submit" class="btn">
+				<i class="fa-regular fa-floppy-disk fa-2xl"></i>
+			</button>
+		</div>
+		
+	</form>
+</th:block>
+</html>
