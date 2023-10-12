@@ -2,8 +2,10 @@ package org.java.pizzeria.controller;
 
 import java.util.List;
 
+import org.java.pizzeria.db.dto.PizzaDTO;
+import org.java.pizzeria.db.pojo.Offer;
 import org.java.pizzeria.db.pojo.Pizza;
-import org.java.pizzeria.db.pojo.PizzaDTO;
+import org.java.pizzeria.db.serv.OfferService;
 import org.java.pizzeria.db.serv.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,120 +23,183 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("/")
 public class MainController {
-	
+
 	@Autowired
 	private PizzaService pizzaService;
-	
+
+	@Autowired
+	private OfferService offerService;
+
+	/**** PIZZA ****/
+
 	@GetMapping
 	public String getIndex(@RequestParam(required = false) String pizza, Model model) {
-		
-		List<Pizza> pizzas = (pizza == null || pizza.isBlank())	? pizzaService.findAll() 
-												: pizzaService.search(pizza);
+
+		List<Pizza> pizzas = (pizza == null || pizza.isBlank()) ? pizzaService.findAll() : pizzaService.search(pizza);
 		model.addAttribute("pizzas", pizzas);
-		
-		return "index";	
+
+		return "index";
 	}
-	
-	@GetMapping("/details/{id}")
+
+	@GetMapping("/pizza/{id}")
 	public String getShow(@PathVariable int id, Model model) {
-		
+
 		String pageTitle = "Pizza Detail";
 		Pizza pizza = pizzaService.findById(id);
-		
+
 		float priceVal = pizza.getPrice() / 100f;
 		String priceFormat = String.format("€%,.2f", priceVal);
-		
+
 		model.addAttribute("pageTitle", pageTitle);
 		model.addAttribute("pizza", pizza);
 		model.addAttribute("priceFormat", priceFormat);
-		
-		return "detail";
+
+		return "pizzas/detail";
 	}
 
-	@GetMapping("/create")
+	@GetMapping("/pizza/create")
 	public String getCreate(Model model) {
-		
+
 		String pageTitle = "Add a new Pizza";
-		
+
 		model.addAttribute("pageTitle", pageTitle);
 		model.addAttribute("pizzaDTO", new PizzaDTO());
-		
-		return "create";
+
+		return "pizzas/create";
 	}
-	
-	@PostMapping("/create")
-	public String store(
-			@Valid @ModelAttribute PizzaDTO pizzaDTO, 
-			BindingResult bindingResult, 
-			Model model
-			) {
-				
+
+	@PostMapping("/pizza/create")
+	public String store(@Valid @ModelAttribute PizzaDTO pizzaDTO, BindingResult bindingResult, Model model) {
+
 		return savePizza(pizzaDTO, bindingResult, model, new Pizza(), true);
-		
 	}
-	
-	@GetMapping("/edit/{id}")
+
+	@GetMapping("/pizza/edit/{id}")
 	public String getUpdate(@PathVariable int id, Model model) {
-		
+
 		String pageTitle = "Edit Pizza";
-		
+
 		Pizza pizza = pizzaService.findById(id);
-		float fPrice = (float)(pizza.getPrice() / 100f);
+		float fPrice = (float) (pizza.getPrice() / 100f);
 		PizzaDTO pizzaDTO = new PizzaDTO(pizza.getName(), pizza.getDescription(), pizza.getImg(), fPrice);
-		
+
 		model.addAttribute("pageTitle", pageTitle);
 		model.addAttribute("pizzaDTO", pizzaDTO);
-		
-		return "edit";
+
+		return "pizzas/edit";
 	}
-	
-	@PostMapping("/edit/{id}")
-	public String update(
-			@Valid @ModelAttribute PizzaDTO pizzaDTO, 
-			BindingResult bindingResult, 
-			Model model,
-			@PathVariable int id
-		) {
-		
+
+	@PostMapping("/pizza/edit/{id}")
+	public String update(@Valid @ModelAttribute PizzaDTO pizzaDTO, BindingResult bindingResult, Model model,
+			@PathVariable int id) {
+
 		Pizza pizza = pizzaService.findById(id);
-		
+
 		return savePizza(pizzaDTO, bindingResult, model, pizza, false);
-		
 	}
-	
-	@PostMapping("/delete/{id}")
+
+	@PostMapping("/pizza/delete/{id}")
 	public String delete(@PathVariable int id) {
-		
+
 		Pizza pizza = pizzaService.findById(id);
 		pizzaService.delete(pizza);
-		
+
 		return "redirect:/";
 	}
-	
-	private String savePizza(PizzaDTO pizzaDTO, BindingResult bindingResult, Model model, Pizza pizza, boolean newPizza) {
-		
-		if(bindingResult.hasErrors()) {
+
+	private String savePizza(PizzaDTO pizzaDTO, BindingResult bindingResult, Model model, Pizza pizza,
+			boolean newPizza) {
+
+		if (bindingResult.hasErrors()) {
 			System.out.println("Error:");
 			bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).forEach(System.out::println);
-					
-			return newPizza ? "create" : "edit";
+
+			return newPizza ? "pizzas/create" : "pizzas/edit";
 		}
 
 		pizza = dtoToEntity(pizza, pizzaDTO);
-		
+
 		pizzaService.save(pizza);
-		
-		return "redirect:/details/" + pizza.getId();
-		
+
+		return "redirect:/pizza/" + pizza.getId();
+
 	}
-	
+
 	private Pizza dtoToEntity(Pizza pizza, PizzaDTO pizzaDTO) {
 		pizza.setName(pizzaDTO.getName());
 		pizza.setDescription(pizzaDTO.getDescription());
 		pizza.setImg(pizzaDTO.getImg());
 		pizza.setPrice(pizzaDTO.getIntPrice());
-		
+
 		return pizza;
 	}
-	
+
+	/**** OFFER ****/
+
+	@GetMapping("/offer/create")
+	public String getOfferCreate(Model model) {
+
+		String pageTitle = "Add a new Offer";
+		List<Pizza> pizzas = pizzaService.findAll();
+
+		model.addAttribute("pageTitle", pageTitle);
+		model.addAttribute("offer", new Offer());
+		model.addAttribute("pizzas", pizzas);
+
+		return "offers/create";
+	}
+
+	@PostMapping("/offer/create")
+	public String offerStore(@Valid @ModelAttribute Offer offer, BindingResult bindingResult, Model model) {
+
+		if (bindingResult.hasErrors()) {
+
+			String pageTitle = "Add a new Offer";
+			List<Pizza> pizzas = pizzaService.findAll();
+
+			model.addAttribute("pageTitle", pageTitle);
+			model.addAttribute("pizzas", pizzas);
+
+			return "offers/create";
+		}
+
+		offerService.save(offer);
+
+		return "redirect:/pizza/" + offer.getPizza().getId();
+	}
+
+	@GetMapping("/offer/edit/{id}")
+	public String getOfferUpdate(@PathVariable int id, Model model) {
+
+		String pageTitle = "Edit Offer";
+		Offer offer = offerService.findById(id);
+		List<Pizza> pizzas = pizzaService.findAll();
+
+		model.addAttribute("pageTitle", pageTitle);
+		model.addAttribute("offer", offer);
+		model.addAttribute("pizzas", pizzas);
+
+		return "offers/edit";
+	}
+
+	@PostMapping("/offer/edit/{id}")
+	public String offerUpdate(@Valid @ModelAttribute Offer offer, BindingResult bindingResult, Model model,
+			@PathVariable int id) {
+
+		if (bindingResult.hasErrors()) {
+
+			String pageTitle = "Edit Offer";
+			List<Pizza> pizzas = pizzaService.findAll();
+
+			model.addAttribute("pageTitle", pageTitle);
+			model.addAttribute("pizzas", pizzas);
+
+			return "offers/edit";
+		}
+		
+		offerService.save(offer);
+
+		return "redirect:/pizza/" + offer.getPizza().getId();
+	}
+
 }

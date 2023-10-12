@@ -31,6 +31,9 @@ body {
 	}
 
 	main {
+		.dashed-border {
+			border: 1px dashed black;
+		}
 		ul {
 			li {
 				list-style: none;

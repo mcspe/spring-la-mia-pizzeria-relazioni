@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="form(${offer}, ${pizzas})">
+	<form th:object="${offer}" method="post">
+
+		<div class="input-group mb-3">
+			<span class="ms-form input-group-text bg-dark text-bg-dark" id="name">Insert offer title</span>
+			<input type="text" class="form-control" name="title" th:field="*{title}" th:errorClass="is-invalid">
+		</div>
+		<div th:if="${#fields.hasErrors('title')}" class="text-danger fs-6 fw-lighter fst-italic">
+			<ul>
+				<li th:each="err : ${#fields.errors('title')}" th:text="${err}"></li>
+			</ul>
+		</div>
+
+		<div class="input-group mb-3">
+			<span class="ms-form input-group-text bg-dark text-bg-dark">Insert discount rate</span>
+			<input type="number" class="form-control" max="80" name="discountRate" th:field="*{discountRate}"
+				th:errorClass="is-invalid">
+			<span class="input-group-text">&percnt;</span>
+		</div>
+		<div th:if="${#fields.hasErrors('discountRate')}" class="text-danger fs-6 fw-lighter fst-italic">
+			<ul>
+				<li th:each="err : ${#fields.errors('discountRate')}" th:text="${err}"></li>
+			</ul>
+		</div>
+
+		<div class="input-group mb-3">
+			<span class="ms-form input-group-text bg-dark text-bg-dark">Insert starting date</span>
+			<input type="date" class="form-control" name="startDate" th:field="*{startDate}" th:errorClass="is-invalid">
+		</div>
+		<div th:if="${#fields.hasErrors('startDate')}" class="text-danger fs-6 fw-lighter fst-italic">
+			<ul>
+				<li th:each="err : ${#fields.errors('startDate')}" th:text="${err}"></li>
+			</ul>
+		</div>
+
+		<div class="input-group mb-3">
+			<span class="ms-form input-group-text bg-dark text-bg-dark">Insert ending date</span>
+			<input type="date" class="form-control" name="endDate" th:field="*{endDate}" th:errorClass="is-invalid">
+		</div>
+		<div th:if="${#fields.hasErrors('endDate')}" class="text-danger fs-6 fw-lighter fst-italic">
+			<ul>
+				<li th:each="err : ${#fields.errors('endDate')}" th:text="${err}"></li>
+			</ul>
+		</div>
+
+		<div class="input-group mb-3">
+			<span class="ms-form input-group-text bg-dark text-bg-dark">Select a pizza</span>
+			<select class="form-control" name="pizza">
+				<option value="0" th:selected="${offer.pizza == null}" disabled>Choose a pizza...</option>
+				<option th:each="pizza : ${pizzas}" th:object="${pizza}" th:value="*{id}" th:selected="${offer.pizza != null && pizza.id == offer.pizza.id}">
+					[[*{name}]]
+				</option>
+			</select>
+		</div>
+		<div th:if="${#fields.hasErrors('pizza')}" class="text-danger fs-6 fw-lighter fst-italic">
+			<ul>
+				<li th:each="err : ${#fields.errors('pizza')}" th:text="${err}"></li>
+			</ul>
+		</div>
+
+		<div class="input-group justify-content-end">
+			<button type="submit" class="btn">
+				<i class="fa-regular fa-floppy-disk fa-2xl"></i>
+			</button>
+		</div>
+
+	</form>
+</th:block>
+<script>
+	console.log("ok");
+</script>
+</html>

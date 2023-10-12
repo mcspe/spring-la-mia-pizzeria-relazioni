@@ -11,7 +11,7 @@
 		<div class="d-flex justify-content-between align-items-center">
 			<h1>[[*{name}]]</h1>
 			<div class="cta d-flex gap-3">
-				<a th:href="@{/edit/{id}(id=*{id})}" class="btn"><i class="fa-solid fa-pencil"></i></a>
+				<a th:href="@{/pizza/edit/{id}(id=*{id})}" class="btn"><i class="fa-solid fa-pencil"></i></a>
 				<span class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal"><i
 						class="fa-solid fa-trash"></i></span>
 
@@ -29,7 +29,7 @@
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-								<form th:action="@{/delete/{id}(id=*{id})}" method="POST">
+								<form th:action="@{/pizza/delete/{id}(id=*{id})}" method="POST">
 									<button type="submit" class="btn btn-dark">Delete</button>
 								</form>
 							</div>

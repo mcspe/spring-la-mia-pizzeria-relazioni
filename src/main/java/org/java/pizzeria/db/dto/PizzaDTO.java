@@ -1,4 +1,4 @@
-package org.java.pizzeria.db.pojo;
+package org.java.pizzeria.db.dto;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;

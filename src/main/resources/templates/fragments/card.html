@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="card(${pizza})" class="p-3">
-	<a th:href="@{details/{id}(id=*{id})}">
+	<a th:href="@{pizza/{id}(id=*{id})}">
 		<div class="pizza-card card text-bg-dark d-flex justify-content-center align-items-center">
 			<img th:src="*{img}" class="card-img" th:alt="*{name}">
 			<div class="card-img-overlay bg-dark bg-opacity-50 d-flex justify-content-between">
