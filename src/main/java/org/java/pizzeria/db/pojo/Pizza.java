@@ -1,13 +1,17 @@
 package org.java.pizzeria.db.pojo;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -35,6 +39,9 @@ public class Pizza {
 	@NotNull
 	@Positive(message = "Pizza price must be greater than zero")
 	private int price;
+	
+	@OneToMany(mappedBy = "pizza", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Offer> offers;
 	
 	public Pizza() {}
 	
@@ -79,6 +86,14 @@ public class Pizza {
 
 	public void setPrice(int price) {
 		this.price = price;
+	}
+	
+	public List<Offer> getOffers() {
+		return offers;
+	}
+
+	public void setOffers(List<Offer> offers) {
+		this.offers = offers;
 	}
 	
 	@Override

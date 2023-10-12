@@ -12,7 +12,8 @@
 			<h1>[[*{name}]]</h1>
 			<div class="cta d-flex gap-3">
 				<a th:href="@{/edit/{id}(id=*{id})}" class="btn"><i class="fa-solid fa-pencil"></i></a>
-				<span class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-trash"></i></span>
+				<span class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal"><i
+						class="fa-solid fa-trash"></i></span>
 
 				<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
 					aria-hidden="true">
@@ -44,6 +45,46 @@
 			<div class="detail-info">
 				<p>[[*{description}]]</p>
 				<h3 class="text-end">Prezzo: [[${priceFormat}]]</h3>
+				<div class="special-offers my-3">
+					<h4>Offerte speciali</h4>
+					<a th:href="@{#}" class="btn btn-dark my-3">Aggiungi un'offerta</a>
+					<ul>
+						<li th:each="offer : *{offers}" th:object="${offer}">
+							<div class="d-flex align-items-center">
+								<h5>[[*{title}]]</h5>
+								<a th:href="@{#}" class="btn"><i class="fa-solid fa-pencil"></i></a>
+								<span class="btn" data-bs-toggle="modal" th:data-bs-target="'#offerModal' + *{id}"><i
+										class="fa-solid fa-trash"></i></span>
+
+								<div class="modal fade" th:id="'offerModal' + *{id}" tabindex="-1"
+									th:aria-labelledby="'offerModal' + *{id}" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h1 class="modal-title fs-5" th:id="'offerModal' + *{id}">Delete [[*{title}]]
+												</h1>
+												<button type="button" class="btn-close" data-bs-dismiss="modal"
+													aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												Are you sure you want to delete [[*{title}]]?
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary"
+													data-bs-dismiss="modal">Close</button>
+												<form th:action="@{#}" method="POST">
+													<button type="submit" class="btn btn-dark">Delete</button>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<span>dal [[*{startDate}]] al [[*{endDate}]] sarà applicato il
+								[[*{discountRate}]]% di sconto</span>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</main>
