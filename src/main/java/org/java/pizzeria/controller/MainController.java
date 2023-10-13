@@ -5,6 +5,7 @@ import java.util.List;
 import org.java.pizzeria.db.dto.PizzaDTO;
 import org.java.pizzeria.db.pojo.Offer;
 import org.java.pizzeria.db.pojo.Pizza;
+import org.java.pizzeria.db.serv.IngredientService;
 import org.java.pizzeria.db.serv.OfferService;
 import org.java.pizzeria.db.serv.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/")
 public class MainController {
 
-	@Autowired
-	private PizzaService pizzaService;
+	@Autowired private PizzaService pizzaService;
+	
+	@Autowired private IngredientService ingredientService;
 
-	@Autowired
-	private OfferService offerService;
-
+	@Autowired private OfferService offerService;
+	
 	/**** PIZZA ****/
 
 	@GetMapping
@@ -134,6 +135,8 @@ public class MainController {
 		return pizza;
 	}
 
+	/**** INGREDIENTS ****/
+	
 	/**** OFFER ****/
 
 	@GetMapping("/offer/create")
@@ -178,6 +181,10 @@ public class MainController {
 		model.addAttribute("pageTitle", pageTitle);
 		model.addAttribute("offer", offer);
 		model.addAttribute("pizzas", pizzas);
+		
+		System.out.println("edit get");
+		System.out.println("id " + offer.getId());
+		System.out.println(offer);
 
 		return "offers/edit";
 	}
@@ -186,6 +193,10 @@ public class MainController {
 	public String offerUpdate(@Valid @ModelAttribute Offer offer, BindingResult bindingResult, Model model,
 			@PathVariable int id) {
 
+		System.out.println("edit post");
+		System.out.println("id " + offer.getId());
+		System.out.println(offer);
+		
 		if (bindingResult.hasErrors()) {
 
 			String pageTitle = "Edit Offer";
@@ -200,6 +211,16 @@ public class MainController {
 		offerService.save(offer);
 
 		return "redirect:/pizza/" + offer.getPizza().getId();
+	}
+	
+	@PostMapping("/offer/delete/{id}")
+	public String deleteOffer(@PathVariable int id) {
+
+		Offer offer = offerService.findById(id);
+		int pId = offer.getPizza().getId();
+		offerService.delete(offer);
+
+		return "redirect:/pizza/" + pId;
 	}
 
 }

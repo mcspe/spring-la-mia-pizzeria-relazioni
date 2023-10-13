@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="form(${offer}, ${pizzas})">
 	<form th:object="${offer}" method="post">
-
+		ID: [[*{id}]]
 		<div class="input-group mb-3">
 			<span class="ms-form input-group-text bg-dark text-bg-dark" id="name">Insert offer title</span>
 			<input type="text" class="form-control" name="title" th:field="*{title}" th:errorClass="is-invalid">
@@ -68,7 +68,5 @@
 
 	</form>
 </th:block>
-<script>
-	console.log("ok");
-</script>
+
 </html>

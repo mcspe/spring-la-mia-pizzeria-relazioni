@@ -67,6 +67,10 @@ public class Offer {
 	public int getId() {
 		return id;
 	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getTitle() {
 		return title;
@@ -135,7 +139,7 @@ public class Offer {
 
 	@Override
 	public String toString() {
-		return "Offer: " + getTitle() + "\n\t" + getPizza() + "\n\t" + "Discount:" + getDiscountRate() + "\n\t"
+		return "[" + getId() + "] " + "Offer: " + getTitle() + "\n\t" + getPizza() + "\n\t" + "Discount:" + getDiscountRate() + "\n\t"
 				+ "Available from: " + getStartDate() + "\n\t" + "to: " + getEndDate();
 	}
 
